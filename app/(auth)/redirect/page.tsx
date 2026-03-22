@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { checkGmail } from "@/app/api/auth";
+import { checkGmail, login } from "@/app/api/auth";
 
 export default function RedirectPage() {
   const { data: session, status } = useSession();
@@ -16,6 +16,7 @@ export default function RedirectPage() {
       const result = await checkGmail(session.user.email);
 
       if (result.exists) {
+        await login(session.user.email);
         router.push("/chatbot");
       } else {
         router.push("/register");

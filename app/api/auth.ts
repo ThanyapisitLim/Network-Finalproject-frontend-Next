@@ -29,6 +29,7 @@ export async function createUser(gmail: string, name: string) {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify(data),
         });
 
@@ -44,3 +45,26 @@ export async function createUser(gmail: string, name: string) {
     }
 }
 
+export async function login(gmail: string) {
+    try {
+        const data = { gmail }
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to login");
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
