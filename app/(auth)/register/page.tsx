@@ -1,30 +1,25 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { createUser } from "@/app/api/auth";
 
 export default function RegisterPage() {
   const [accountName, setAccountName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const handleRegister = () => {
-  console.log (accountName)
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleRegister = async () => {
+    if (!session?.user?.email || !accountName.trim()) return;
+    setIsLoading(true);
+    await createUser(session.user.email, accountName);
+    router.push("/chatbot");
   };
+
   return (
     <div className="flex min-h-screen bg-zinc-50 dark:bg-[#09090b] font-sans">
-      {/* Left Panel - Branding (ใช้ชุดเดียวกับ Login เพื่อความต่อเนื่อง) */}
-      {/* <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-zinc-900 dark:bg-zinc-950 items-center justify-center border-r border-zinc-800">
-        <div className="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-blue-600/10 blur-3xl" />
-        <div className="relative z-10 max-w-md px-12 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 mb-8 shadow-lg shadow-blue-600/30">
-            <span className="text-3xl">✨</span>
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-white mb-4">Join COSCI AI</h1>
-          <p className="text-zinc-400 text-lg">
-            Create your unique identity and start exploring our intelligent chatbot.
-          </p>
-        </div>
-      </div> */}
-
       {/* Right Panel - Register Form */}
       <div className="flex flex-1 items-center justify-center px-6 py-12 bg-white dark:bg-[#09090b]">
         <div className="w-full max-w-sm">
@@ -41,41 +36,29 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-6">
-            {/* Account Name Input */}
+          <div className="space-y-6">
             <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
-              <label
-                htmlFor="name"
-                className="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-3 ml-1"
-              >
+              <label className="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-3 ml-1">
                 Account Name / Alias
               </label>
+
               <input
-                id="name"
                 type="text"
                 value={accountName}
                 onChange={(e) => setAccountName(e.target.value)}
                 placeholder="Enter Your Name"
-                required
-                className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-5 py-4 text-sm font-medium outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-inner"
+                className="w-full rounded-2xl border px-5 py-4"
               />
             </div>
 
             <button
-              type="submit"
+              onClick={handleRegister}
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-3 bg-blue-600 dark:bg-blue-500 rounded-2xl px-6 py-4 text-sm font-bold text-white transition-all hover:bg-blue-700 dark:hover:bg-blue-600 active:scale-[0.98] shadow-lg shadow-blue-600/20 disabled:opacity-70"
+              className="w-full bg-blue-600 rounded-2xl px-6 py-4 text-white"
             >
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Processing...</span>
-                </div>
-              ) : (
-                <span>Register Account</span>
-              )}
+              Register Account
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
