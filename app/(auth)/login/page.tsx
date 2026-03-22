@@ -27,15 +27,15 @@ export default function LoginPage() {
             Cozy Chatbot
           </h1>
           <p className="text-zinc-400 text-lg leading-relaxed">
-            LLM Intelligence x Robust Infrastructure
+            Your AI assistant for all COSCI inquiries and support.
           </p>
           
           <div className="mt-10 grid grid-cols-2 gap-3">
             {[
-              { icon: "🧠", label: "LLM Powered" },
-              { icon: "⚡", label: "Redis Cache" },
-              { icon: "🔍", label: "Vector Search" },
-              { icon: "🗄️", label: "MySQL Store" },
+              { icon: "🧠", label: "COSCI SWU" },
+              { icon: "⚡", label: "News" },
+              { icon: "🔍", label: "Program" },
+              { icon: "🗄️", label: "Admission" },
             ].map((f) => (
               <div key={f.label} className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-zinc-300">
                 <span className="text-lg">{f.icon}</span>
@@ -61,7 +61,7 @@ export default function LoginPage() {
               Sign in to Cozy 
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              เข้าสู่ระบบด้วยบัญชี Google เพื่อใช้งานระบบ Chatbot 
+              Sign in with Google to access the Chatbot
             </p>
           </div>
 
