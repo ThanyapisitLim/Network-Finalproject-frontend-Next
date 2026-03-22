@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/app/api/auth";
+import { setCookie } from "@/app/lib/cookie";
 
 export default function RegisterPage() {
   const [accountName, setAccountName] = useState("");
@@ -14,7 +15,8 @@ export default function RegisterPage() {
   const handleRegister = async () => {
     if (!session?.user?.email || !accountName.trim()) return;
     setIsLoading(true);
-    await createUser(session.user.email, accountName);
+    const data = await createUser(session.user.email, accountName);
+    setCookie(data.accessToken);
     router.push("/chatbot");
   };
 

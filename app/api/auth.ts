@@ -29,7 +29,6 @@ export async function createUser(gmail: string, name: string) {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",
             body: JSON.stringify(data),
         });
 
@@ -53,7 +52,6 @@ export async function login(gmail: string) {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",
             body: JSON.stringify(data),
         });
 
