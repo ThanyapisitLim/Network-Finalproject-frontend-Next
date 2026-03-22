@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +69,7 @@ export default function LoginPage() {
           {/* Google Login Card — ปรับให้ดูเป็น Card เพื่อให้พื้นที่ดูมีมิติ */}
           <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] p-8 mb-8 shadow-sm">
             <button
-              onClick={handleGoogleLogin}
+              onClick={() => signIn("google")}
               disabled={isLoading}
               className="group relative w-full flex items-center justify-center gap-3 bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-2xl px-6 py-4 text-sm font-bold text-zinc-700 dark:text-zinc-200 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:border-blue-400 dark:hover:border-blue-500/50 active:scale-[0.98] shadow-sm"
             >
