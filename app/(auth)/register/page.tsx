@@ -7,15 +7,6 @@ export default function RegisterPage() {
   const [accountName, setAccountName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!accountName) return alert("Please enter your account name");
-    
-    setIsLoading(true);
-    // TODO: ส่ง accountName ไปที่ Backend พร้อมกับขั้นตอน Google Auth
-    // console.log("Registering as:", accountName);
-  };
-
   return (
     <div className="flex min-h-screen bg-zinc-50 dark:bg-[#09090b] font-sans">
       {/* Left Panel - Branding (ใช้ชุดเดียวกับ Login เพื่อความต่อเนื่อง) */}
@@ -43,14 +34,18 @@ export default function RegisterPage() {
               Create Account
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400">
-              Identify yourself. Please provide your real name for account verification.
+              Identify yourself. Please provide your real name for account
+              verification.
             </p>
           </div>
 
           <form onSubmit={handleRegister} className="space-y-6">
             {/* Account Name Input */}
             <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
-              <label htmlFor="name" className="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-3 ml-1">
+              <label
+                htmlFor="name"
+                className="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-3 ml-1"
+              >
                 Account Name / Alias
               </label>
               <input
@@ -62,7 +57,6 @@ export default function RegisterPage() {
                 required
                 className="w-full rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-5 py-4 text-sm font-medium outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-inner"
               />
-              
             </div>
 
             {/* Google Link Button
@@ -84,23 +78,20 @@ export default function RegisterPage() {
               )}
             </button> */}
             <button
-  type="submit"
-  disabled={isLoading}
-  className="w-full flex items-center justify-center gap-3 bg-blue-600 dark:bg-blue-500 rounded-2xl px-6 py-4 text-sm font-bold text-white transition-all hover:bg-blue-700 dark:hover:bg-blue-600 active:scale-[0.98] shadow-lg shadow-blue-600/20 disabled:opacity-70"
->
-  {isLoading ? (
-    <div className="flex items-center gap-2">
-      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-      <span>Processing...</span>
-    </div>
-  ) : (
-    <span>Register Account</span>
-  )}
-</button>
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-3 bg-blue-600 dark:bg-blue-500 rounded-2xl px-6 py-4 text-sm font-bold text-white transition-all hover:bg-blue-700 dark:hover:bg-blue-600 active:scale-[0.98] shadow-lg shadow-blue-600/20 disabled:opacity-70"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Processing...</span>
+                </div>
+              ) : (
+                <span>Register Account</span>
+              )}
+            </button>
           </form>
-          
-
-          
         </div>
       </div>
     </div>
