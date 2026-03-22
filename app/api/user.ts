@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-const token = Cookies.get('')
+const token = Cookies.get('token')
 
 export async function getUser() {
     const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-user`, {

@@ -28,9 +28,11 @@ export default function ChatbotPage() {
   }, [activeConversation?.messages, isTyping]);
 
   useEffect(() => {
-    function fetchUserData(){
-      const user = await getUser
+    async function fetchUserData(){
+      const user = await getUser()
+      console.log(user)
     }
+    fetchUserData()  
   }, []);
 
   const createConversation = (firstMessage: string): string => {
