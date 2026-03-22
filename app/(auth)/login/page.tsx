@@ -27,7 +27,7 @@ export default function LoginPage() {
             Cozy Chatbot
           </h1>
           <p className="text-zinc-400 text-lg leading-relaxed">
-            Your AI assistant for all COSCI inquiries.
+            Your AI assistant for all COSCI inquiries and support.
           </p>
           
           <div className="mt-10 grid grid-cols-2 gap-3">
