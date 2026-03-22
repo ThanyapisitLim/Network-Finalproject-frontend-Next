@@ -7,6 +7,7 @@ import MessageBubble from "../../components/MessageBubble";
 import TypingIndicator from "../../components/TypingIndicator";
 import WelcomeScreen from "../../components/WelcomeScreen";
 import ChatInput from "../../components/ChatInput";
+import { getUser } from "@/app/api/user";
 
 // ─── Helpers ────────────────────────────────────────────────────────
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -25,6 +26,12 @@ export default function ChatbotPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeConversation?.messages, isTyping]);
+
+  useEffect(() => {
+    function fetchUserData(){
+      const user = await getUser
+    }
+  }, []);
 
   const createConversation = (firstMessage: string): string => {
     const id = uid();
