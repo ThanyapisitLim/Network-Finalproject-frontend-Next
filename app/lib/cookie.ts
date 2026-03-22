@@ -1,3 +1,13 @@
+import Cookies from "js-cookie";
+
 export function setCookie(token: string) {
-    document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 7}; samesite=lax`;
+    Cookies.set("token", token, { expires: 1 })
+}
+
+export function getCookie(name: string) {
+    return Cookies.get(name)
+}
+
+export function deleteCookie(name: string) {
+    Cookies.remove(name)
 }
