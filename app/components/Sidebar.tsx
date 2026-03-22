@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Conversation } from "../types/chat";
+import { getUser } from "../api/user";
 
 interface SidebarProps {
   conversations: Conversation[];
@@ -19,6 +21,16 @@ export default function Sidebar({
   isOpen,
   onClose,
 }: SidebarProps) {
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    async function fetchUserData() {
+      const user = await getUser();
+      setUser(user);
+    }
+    fetchUserData();
+  }, []);
+  const firstLetter = user?.[0]?.name?.charAt(0)?.toUpperCase() || "?";
+
   return (
     <>
       {/* Backdrop for mobile */}
@@ -96,13 +108,13 @@ export default function Sidebar({
         <div className="p-4 border-t border-zinc-800">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
-              AI
+              {firstLetter}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-zinc-200 truncate">
-                Smart Chatbot
+                {user?.[0]?.name}
               </p>
-              <p className="text-xs text-zinc-500">v1.0 • Ollama</p>
+              <p className="text-xs text-zinc-500">{user?.[0]?.gmail}</p>
             </div>
           </div>
         </div>

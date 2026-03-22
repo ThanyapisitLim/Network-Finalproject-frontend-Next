@@ -9,5 +9,6 @@ export async function getUser() {
             "Authorization": `Bearer ${token}`,
         },
     });
-    return data
+    const res = data.json()
+    return res
 }
