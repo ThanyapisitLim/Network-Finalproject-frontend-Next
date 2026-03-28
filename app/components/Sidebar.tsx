@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Conversation } from "../types/chat";
 import { getUser } from "../api/user";
+import LogoutButton from "./LogoutButton"; 
 
 interface SidebarProps {
   conversations: Conversation[];
@@ -104,8 +105,8 @@ export default function Sidebar({
           ))}
         </nav>
 
-        {/* Bottom branding */}
-        <div className="p-4 border-t border-zinc-800">
+        {/* Bottom branding - ปรับปรุงตรงนี้ */}
+        <div className="p-4 border-t border-zinc-800 space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
               {firstLetter}
@@ -114,11 +115,16 @@ export default function Sidebar({
               <p className="text-sm font-medium text-zinc-200 truncate">
                 {user?.[0]?.name}
               </p>
-              <p className="text-xs text-zinc-500">{user?.[0]?.gmail}</p>
+              <p className="text-xs text-zinc-500 truncate">{user?.[0]?.gmail}</p>
             </div>
+          </div>
+          
+          {}
+          <div className="pt-2">
+            <LogoutButton />
           </div>
         </div>
       </aside>
     </>
   );
-}
+} 
