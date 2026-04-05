@@ -26,6 +26,7 @@ export async function createUser(gmail: string, name: string) {
         const data = { gmail, name }
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-user`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -49,6 +50,7 @@ export async function login(gmail: string) {
         const data = { gmail }
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -61,6 +63,32 @@ export async function login(gmail: string) {
 
         const result = await response.json();
         return result;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export async function logout() {
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/logout`,
+            {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to logout");
+        }
+
+        const result = await response.json();
+        return result;
+
     } catch (error) {
         console.error(error);
         throw error;
