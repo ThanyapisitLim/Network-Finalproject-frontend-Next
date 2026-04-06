@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Message, Conversation } from "../../types/chat";
 import Sidebar from "../../components/Sidebar";
 import MessageBubble from "../../components/MessageBubble";
@@ -8,6 +8,7 @@ import TypingIndicator from "../../components/TypingIndicator";
 import WelcomeScreen from "../../components/WelcomeScreen";
 import ChatInput from "../../components/ChatInput";
 import { getUser } from "@/app/api/user";
+import { getMessages, deleteMessages, chatWithAI, deleteConversationGroup } from "@/app/api/message";
 
 // ─── Helpers ────────────────────────────────────────────────────────
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -18,6 +19,7 @@ export default function ChatbotPage() {
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConversation = conversations.find((c) => c.id === activeConvId);
@@ -26,6 +28,64 @@ export default function ChatbotPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeConversation?.messages, isTyping]);
+
+  // Load chat history from DB on mount
+  useEffect(() => {
+    async function loadHistory() {
+      try {
+        const result = await getMessages();
+        const dbMessages: any[] = result.data || [];
+
+        if (dbMessages.length > 0) {
+          // Group DB messages by group ID
+          const grouped: Record<string, Message[]> = {};
+
+          dbMessages.forEach((m: any) => {
+            // Group ID is stored in the 'group_id' column. 
+            // In case there is legacy data without group, fallback to a single group
+            const gId = m.group_id?.toString() || "legacy_chat";
+            if (!grouped[gId]) grouped[gId] = [];
+
+            grouped[gId].push({
+              id: m.message_id?.toString() || uid(),
+              role: m.role as "user" | "assistant",
+              content: m.context,
+              timestamp: new Date(m.created_at),
+            });
+          });
+
+          const loadedConversations: Conversation[] = Object.entries(grouped).map(([gId, msgs]) => {
+            const firstUserMsg = msgs.find((m) => m.role === "user");
+            const title = firstUserMsg
+              ? firstUserMsg.content.length > 40
+                ? firstUserMsg.content.slice(0, 40) + "…"
+                : firstUserMsg.content
+              : "Chat History";
+
+            return {
+              id: gId,
+              title,
+              messages: msgs,
+              updatedAt: msgs[msgs.length - 1]?.timestamp || new Date(),
+            };
+          });
+
+          // Sort descending based on last message timestamp
+          loadedConversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+
+          setConversations(loadedConversations);
+          
+          // Set the most recent conversation as active
+          setActiveConvId(loadedConversations[0].id);
+        }
+      } catch (error) {
+        console.error("Failed to load chat history:", error);
+      } finally {
+        setIsLoadingHistory(false);
+      }
+    }
+    loadHistory();
+  }, []);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -61,14 +121,20 @@ export default function ChatbotPage() {
   };
 
   const handleSend = async (text: string) => {
-    let convId = activeConvId;
+    const isNewChat = !activeConvId;
+    let convId = activeConvId || "temp_" + uid();
 
-    // Create new conversation if none active
-    if (!convId) {
-      convId = createConversation(text);
+    // Create a temporary conversation immediately so user feels fast feedback
+    if (isNewChat) {
+      const title = text.length > 40 ? text.slice(0, 40) + "…" : text;
+      setConversations((prev) => [
+        { id: convId, title, messages: [], updatedAt: new Date() },
+        ...prev,
+      ]);
+      setActiveConvId(convId);
     }
 
-    // Add user message
+    // Add user message to UI
     const userMsg: Message = {
       id: uid(),
       role: "user",
@@ -77,28 +143,70 @@ export default function ChatbotPage() {
     };
     addMessage(convId, userMsg);
 
-    // TODO: Replace with your API call
-    // Example:
-    // setIsTyping(true);
-    // const response = await fetch("/api/chat", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ message: text, conversationId: convId }),
-    // });
-    // const data = await response.json();
-    // const assistantMsg: Message = {
-    //   id: uid(),
-    //   role: "assistant",
-    //   content: data.reply,
-    //   timestamp: new Date(),
-    // };
-    // addMessage(convId, assistantMsg);
-    // setIsTyping(false);
+    // Call backend endpoint to handle the full chat flow
+    setIsTyping(true);
+    try {
+      // Pass convId only if it's not a temp one
+      const result = await chatWithAI(text, isNewChat ? undefined : convId);
+
+      if (!result || result.groupId === undefined) {
+        throw new Error("Invalid response from AI server: missing groupId");
+      }
+
+      const realGroupId = result.groupId.toString();
+
+      // If it was a new chat, swap the temp ID with the real DB ID
+      if (isNewChat) {
+        const oldConvId = convId;
+        setConversations(prev => prev.map(c => 
+           c.id === oldConvId ? { ...c, id: realGroupId } : c
+        ));
+        setActiveConvId(realGroupId);
+        convId = realGroupId;
+      }
+
+      const assistantMsg: Message = {
+        id: result.assistantMessage?.message_id?.toString() || uid(),
+        role: "assistant",
+        content: result.answer,
+        timestamp: new Date(),
+      };
+      
+      addMessage(convId, assistantMsg);
+
+    } catch (error) {
+      console.error("Chat error:", error);
+
+      const errorMsg: Message = {
+        id: uid(),
+        role: "assistant",
+        content: "ขออภัย เกิดข้อผิดพลาดในการสื่อสารกับเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง",
+        timestamp: new Date(),
+      };
+      addMessage(convId, errorMsg);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleNewChat = () => {
+    // Just deselect the active conversation to clear the UI, don't delete from DB
     setActiveConvId(null);
     setSidebarOpen(false);
+  };
+
+  const handleDeleteGroup = async (groupId: string) => {
+    // Optimistically remove from UI
+    if (activeConvId === groupId) {
+      setActiveConvId(null);
+    }
+    setConversations(prev => prev.filter(c => c.id !== groupId));
+
+    try {
+      await deleteConversationGroup(groupId);
+    } catch (error) {
+      console.error("Failed to delete group:", error);
+    }
   };
 
   return (
@@ -108,6 +216,7 @@ export default function ChatbotPage() {
         conversations={conversations}
         activeId={activeConvId}
         onSelect={(id) => setActiveConvId(id)}
+        onDelete={handleDeleteGroup}
         onNew={handleNewChat}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -166,8 +275,15 @@ export default function ChatbotPage() {
           </button>
         </header>
 
-        {/* Messages area or Welcome screen */}
-        {!activeConversation || activeConversation.messages.length === 0 ? (
+        {/* Loading state */}
+        {isLoadingHistory ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-2 border-zinc-700 border-t-blue-500 rounded-full animate-spin" />
+              <p className="text-sm text-zinc-500">Loading chat history...</p>
+            </div>
+          </div>
+        ) : !activeConversation || activeConversation.messages.length === 0 ? (
           <WelcomeScreen onSelect={handleSend} />
         ) : (
           <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 scrollbar-thin">
@@ -182,7 +298,7 @@ export default function ChatbotPage() {
         )}
 
         {/* Input */}
-        <ChatInput onSend={handleSend} disabled={isTyping} />
+        <ChatInput onSend={handleSend} disabled={isTyping || isLoadingHistory} />
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ interface SidebarProps {
   conversations: Conversation[];
   activeId: string | null;
   onSelect: (id: string) => void;
+  onDelete: (id: string) => void;
   onNew: () => void;
   isOpen: boolean;
   onClose: () => void;
@@ -18,6 +19,7 @@ export default function Sidebar({
   conversations,
   activeId,
   onSelect,
+  onDelete,
   onNew,
   isOpen,
   onClose,
@@ -85,23 +87,40 @@ export default function Sidebar({
             </p>
           )}
           {conversations.map((conv) => (
-            <button
-              key={conv.id}
-              onClick={() => {
-                onSelect(conv.id);
-                onClose();
-              }}
-              className={`
-                w-full text-left px-3 py-2.5 rounded-lg text-sm truncate transition-colors
-                ${
-                  activeId === conv.id
-                    ? "bg-zinc-800 text-white font-medium"
-                    : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
-                }
-              `}
-            >
-              {conv.title}
-            </button>
+            <div key={conv.id} className="relative group">
+              <button
+                onClick={() => {
+                  onSelect(conv.id);
+                  onClose();
+                }}
+                className={`
+                  w-full text-left px-3 py-2.5 pr-10 rounded-lg text-sm truncate transition-colors
+                  ${
+                    activeId === conv.id
+                      ? "bg-zinc-800 text-white font-medium"
+                      : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
+                  }
+                `}
+              >
+                {conv.title}
+              </button>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(conv.id);
+                }}
+                className={`
+                  absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md
+                  text-zinc-500 hover:text-red-400 hover:bg-zinc-800/80 transition-colors
+                  ${activeId === conv.id ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
+                `}
+                title="Delete chat"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
           ))}
         </nav>
 
