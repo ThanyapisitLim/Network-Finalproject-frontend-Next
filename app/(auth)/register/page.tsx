@@ -10,7 +10,7 @@ export default function RegisterPage() {
   const [accountName, setAccountName] = useState("");
   const [status, setStatus] = useState("นักเรียน ม.6");
   const [major, setMajor] = useState("การจัดการธุรกิจไซเบอร์ (CB)");
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
@@ -20,14 +20,17 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const data = await createUser(session.user.email, accountName);
+      const data = await createUser(
+        session.user.email,
+        accountName,
+        status,
+        major,
+      );
       setCookie(data.accessToken);
 
-    
       localStorage.setItem("userStatus", status);
       localStorage.setItem("userMajor", major);
 
-     
       router.push("/chatbot");
     } catch (error) {
       console.error("Registration failed", error);
@@ -36,19 +39,23 @@ export default function RegisterPage() {
     }
   };
 
-  const statusOptions = ["นักเรียน ม.6", "เด็กซิ่ว", "ผู้ปกครอง", "ศิษย์เก่า", "บุคคลทั่วไป"];
+  const statusOptions = [
+    "นักเรียน ม.6",
+    "เด็กซิ่ว",
+    "ผู้ปกครอง",
+    "ศิษย์เก่า",
+    "บุคคลทั่วไป",
+  ];
   const majorOptions = [
     "การจัดการธุรกิจไซเบอร์ (CB)",
     "คอมพิวเตอร์เพื่อการสื่อสาร (CP)",
     "การออกแบบสื่อปฏิสัมพันธ์และมัลติมีเดีย (IM)",
     "ภาพยนตร์และสื่อดิจิทัล",
-    "นวัตกรรมสื่อสารสังคม (วิชาเอกต่างๆ)"
+    "นวัตกรรมสื่อสารสังคม (วิชาเอกต่างๆ)",
   ];
 
   return (
-    
     <div className="flex min-h-screen bg-zinc-50 dark:bg-[#09090b] font-sans relative overflow-hidden">
-      
       {/* ส่วนเอฟเฟกต์แสงม่วงๆ ฟ้าๆ ด้านหลัง */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-600/5 blur-[100px] rounded-full pointer-events-none" />
@@ -72,7 +79,6 @@ export default function RegisterPage() {
           <div className="space-y-4">
             {}
             <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm space-y-5 Backdrop-blur-sm">
-              
               {}
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">
@@ -92,12 +98,14 @@ export default function RegisterPage() {
                 <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">
                   Status / สถานะ
                 </label>
-                <select 
+                <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                   className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-5 py-4 text-sm text-zinc-950 dark:text-zinc-200 outline-none focus:border-purple-500 dark:focus:border-purple-600 cursor-pointer appearance-none"
                 >
-                  {statusOptions.map(opt => <option key={opt}>{opt}</option>)}
+                  {statusOptions.map((opt) => (
+                    <option key={opt}>{opt}</option>
+                  ))}
                 </select>
               </div>
 
@@ -106,12 +114,14 @@ export default function RegisterPage() {
                 <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">
                   Major / เอกที่สนใจ
                 </label>
-                <select 
+                <select
                   value={major}
                   onChange={(e) => setMajor(e.target.value)}
                   className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-5 py-4 text-sm text-zinc-950 dark:text-zinc-200 outline-none focus:border-purple-500 dark:focus:border-purple-600 cursor-pointer appearance-none"
                 >
-                  {majorOptions.map(opt => <option key={opt}>{opt}</option>)}
+                  {majorOptions.map((opt) => (
+                    <option key={opt}>{opt}</option>
+                  ))}
                 </select>
               </div>
             </div>

@@ -21,9 +21,9 @@ export async function checkGmail(gmail: string) {
     }
 }
 
-export async function createUser(gmail: string, name: string) {
+export async function createUser(gmail: string, name: string, status: string, interest: string) {
     try {
-        const data = { gmail, name }
+        const data = { gmail, name, status, interest }
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-user`, {
             method: "POST",
             credentials: "include",
