@@ -13,6 +13,7 @@ async function refreshAccessToken(): Promise<string | null> {
             credentials: "include", // sends the HttpOnly refreshToken cookie
             headers: {
                 "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "69420",
             },
         });
 
@@ -52,6 +53,7 @@ export async function fetchWithAuth(
         credentials: "include" as RequestCredentials,
         headers: {
             "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "69420",
             ...options.headers,
             ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         },
