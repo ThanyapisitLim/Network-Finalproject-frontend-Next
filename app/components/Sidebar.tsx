@@ -10,6 +10,7 @@ interface SidebarProps {
   conversations: Conversation[];
   activeId: string | null;
   onSelect: (id: string) => void;
+  onDelete: (groupId: string) => Promise<void>;
   onNew: () => void;
   isOpen: boolean;
   onClose: () => void;
