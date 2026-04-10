@@ -14,25 +14,25 @@ export default function MessageBubble({ message }: { message: Message }) {
       {/* Avatar */}
       <div
         className={`
-          w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5
+          w-9 h-9 rounded-2xl flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow-sm
           ${
             isUser
-              ? "bg-zinc-700 text-zinc-300"
-              : "bg-gradient-to-br from-blue-500 to-violet-600 text-white"
+              ? "bg-white border border-slate-200 text-slate-600"
+              : "bg-linear-to-br from-blue-500 to-indigo-600 text-white"
           }
         `}
       >
-        {isUser ? "U" : "AI"}
+        {isUser ? "YOU" : "AI"}
       </div>
 
       {/* Content */}
       <div
         className={`
-          py-3 px-4 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap max-w-[80%]
+          py-3.5 px-5 rounded-[1.5rem] text-[15px] font-medium leading-relaxed whitespace-pre-wrap max-w-[85%] shadow-sm
           ${
             isUser
               ? "bg-blue-600 text-white rounded-tr-md"
-              : "bg-zinc-800/60 border border-zinc-700/50 text-zinc-200 rounded-tl-md"
+              : "bg-slate-100 border border-slate-200/50 text-slate-800 rounded-tl-md"
           }
         `}
       >

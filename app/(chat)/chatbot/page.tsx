@@ -25,7 +25,7 @@ export default function ChatbotPage() {
   } = useChat();
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
+    <div className="flex h-screen bg-white text-slate-900 overflow-hidden">
       {/* Sidebar */}
       <Sidebar
         conversations={conversations}

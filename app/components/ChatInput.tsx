@@ -33,19 +33,19 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
   };
 
   return (
-    <div className="border-t border-zinc-800 bg-zinc-950/80 backdrop-blur-xl px-4 py-4">
+    <div className="border-t border-slate-200 bg-white/80 backdrop-blur-xl px-4 py-6">
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-end gap-2 bg-zinc-900 border border-zinc-700/60 rounded-2xl px-4 py-2 focus-within:border-zinc-500 transition-colors">
+        <div className="flex items-end gap-3 bg-slate-50 border border-slate-200 rounded-[1.5rem] px-5 py-3 focus-within:border-blue-400 focus-within:bg-white focus-within:shadow-md transition-all duration-300">
           <textarea
             ref={textareaRef}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Send a message…"
+            placeholder="Type a message..."
             disabled={disabled}
             rows={1}
             className="
-              flex-1 bg-transparent text-sm text-zinc-100 placeholder-zinc-600
+              flex-1 bg-transparent text-[15px] font-medium text-slate-900 placeholder-slate-400
               resize-none outline-none py-2 max-h-[200px]
               disabled:opacity-50
             "
@@ -54,18 +54,18 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             onClick={handleSend}
             disabled={!value.trim() || disabled}
             className="
-              shrink-0 w-9 h-9 rounded-xl flex items-center justify-center
-              bg-blue-600 text-white transition-all
-              hover:bg-blue-500 active:scale-95
-              disabled:opacity-30 disabled:hover:bg-blue-600 disabled:active:scale-100
+              shrink-0 w-11 h-11 rounded-2xl flex items-center justify-center
+              bg-blue-600 text-white shadow-lg shadow-blue-500/20 transition-all
+              hover:bg-blue-700 active:scale-90
+              disabled:opacity-20 disabled:grayscale disabled:active:scale-100
             "
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2.5}
+              strokeWidth={3}
             >
               <path
                 strokeLinecap="round"
@@ -75,8 +75,8 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             </svg>
           </button>
         </div>
-        <p className="text-[11px] text-zinc-600 text-center mt-2">
-          Smart Chatbot can make mistakes. Verify important information.
+        <p className="text-[11px] font-bold text-slate-400 text-center mt-3 uppercase tracking-widest">
+          Smart Chatbot can make mistakes. Verify important info.
         </p>
       </div>
     </div>

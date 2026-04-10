@@ -60,63 +60,63 @@ export default function RegisterPage() {
     "การสื่อสารเพื่อการจัดการนวัตกรรม",
     "การสื่อสารเพื่อเศรษฐศาสตร์",
     "การสื่อสารเพื่อเกษตรสร้างสรรค์",
-
   ];
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-[#09090b] font-sans relative overflow-hidden">
-      {/* ส่วนเอฟเฟกต์แสงม่วงๆ ฟ้าๆ ด้านหลัง */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-600/5 blur-[100px] rounded-full pointer-events-none" />
+    <div className="flex min-h-screen bg-slate-50 font-sans relative overflow-hidden">
+      {/* Light colorful blobs background */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-200/40 blur-[120px] rounded-full pointer-events-none mix-blend-multiply" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-200/40 blur-[100px] rounded-full pointer-events-none mix-blend-multiply" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12 bg-white dark:bg-[#09090b] relative z-10">
-        <div className="w-full max-w-sm">
-          <div className="mb-10 text-center lg:text-left">
-            <h2 className="text-sm font-bold tracking-[0.2em] text-purple-600 dark:text-purple-400 uppercase mb-3">
+      <div className="flex flex-1 items-center justify-center px-6 py-12 relative z-10">
+        <div className="w-full max-w-md">
+          <div className="mb-10 text-center lg:text-left bg-white/60 p-6 rounded-3xl backdrop-blur-md border border-white shadow-sm inline-block">
+            <h2 className="text-xs font-bold tracking-[0.25em] text-purple-600 uppercase mb-3">
               Get Started
             </h2>
-            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 mb-4">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
               Create Account
             </h1>
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm">
-              ระบุตัวตนและเลือกข้อมูลที่คุณสนใจเพื่อเริ่มต้นใช้งานแชทบอทวิทยาลัยนวัตกรรมสื่อสังคม
+            <p className="text-slate-500 font-medium leading-relaxed">
+              ระบุสมญานามและเลือกข้อมูลที่คุณสนใจเพื่อเริ่มต้นใช้งานแชทบอท
             </p>
           </div>
 
-          <div className="space-y-4">
-            <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm space-y-5 Backdrop-blur-sm">
+          <div className="space-y-6">
+            <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-6">
+              
               {/* Account Name */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">
                   Account Name / Alias
                 </label>
                 <input
                   type="text"
                   value={accountName}
                   onChange={(e) => setAccountName(e.target.value)}
-                  placeholder="Enter Your Name"
-                  className="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-5 py-4 text-sm text-zinc-950 dark:text-zinc-200 outline-none focus:border-purple-500 dark:focus:border-purple-600 transition-all"
+                  placeholder="Enter Your Display Name"
+                  className="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 px-5 py-4 text-sm font-medium text-slate-900 outline-none focus:border-purple-500 focus:bg-white transition-all shadow-inner"
                 />
               </div>
 
               {/* Status Select */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">
-                  Status / สถานะ
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">
+                  Status / สถานะความเป็นมา
                 </label>
                 <div className="relative group">
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-5 py-4 text-sm text-zinc-950 dark:text-zinc-200 outline-none focus:border-purple-500 dark:focus:border-purple-600 cursor-pointer appearance-none transition-all"
+                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-sm font-medium text-slate-900 outline-none focus:border-purple-500 focus:bg-white cursor-pointer appearance-none transition-all shadow-inner"
                   >
                     {statusOptions.map((opt) => (
                       <option key={opt}>{opt}</option>
                     ))}
                   </select>
-                  {/* ไอคอนลูกศร */}
-                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-zinc-400 group-focus-within:text-purple-500 transition-colors">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-purple-600 transition-colors">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -125,22 +125,21 @@ export default function RegisterPage() {
 
               {/* Major Select */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-1">
-                  Major / เอกที่สนใจ
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider ml-1">
+                  Major / วิชาเอกที่สนใจ
                 </label>
                 <div className="relative group">
                   <select
                     value={major}
                     onChange={(e) => setMajor(e.target.value)}
-                    className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-5 py-4 text-sm text-zinc-950 dark:text-zinc-200 outline-none focus:border-purple-500 dark:focus:border-purple-600 cursor-pointer appearance-none transition-all"
+                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-sm font-medium text-slate-900 outline-none focus:border-purple-500 focus:bg-white cursor-pointer appearance-none transition-all shadow-inner"
                   >
                     {majorOptions.map((opt) => (
                       <option key={opt}>{opt}</option>
                     ))}
                   </select>
-                  {/* ไอคอนลูกศร */}
-                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-zinc-400 group-focus-within:text-purple-500 transition-colors">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-purple-600 transition-colors">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -151,9 +150,9 @@ export default function RegisterPage() {
             <button
               onClick={handleRegister}
               disabled={isLoading || !accountName.trim()}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 rounded-2xl px-6 py-4 text-white font-bold shadow-lg shadow-purple-600/10 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+              className="w-full bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-2xl px-6 py-4.5 text-[15px] text-white font-bold shadow-lg shadow-purple-500/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 disabled:shadow-none"
             >
-              {isLoading ? "Creating Account..." : "Register Account"}
+              {isLoading ? "Creating Profile..." : "Complete Registration"}
             </button>
           </div>
         </div>
